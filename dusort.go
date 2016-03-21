@@ -26,6 +26,7 @@ func main() {
 	var first *entry
 	go readEntry(entryc)
 	go func() {
+		draw(nil, false)
 		for e := range entryc {
 			m.Lock()
 			ee := e
@@ -34,9 +35,10 @@ func main() {
 			} else {
 				first = first.Insert(&ee)
 			}
-			draw(first.List())
+			draw(first.List(), false)
 			m.Unlock()
 		}
+		draw(first.List(), true)
 	}()
 
 	for {
@@ -54,10 +56,20 @@ func main() {
 	}
 }
 
-func draw(entries []*entry) {
+func draw(entries []*entry, finished bool) {
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 	xmax, ymax := termbox.Size()
 	x, y := 0, 0
+	state := "Waiting input..."
+	if finished {
+		state = "Finished"
+	}
+	for _, r := range state {
+		termbox.SetCell(x, y, r, termbox.ColorDefault, termbox.ColorDefault)
+		x++
+	}
+	x = 0
+	y++
 	for _, e := range entries {
 		x = 0
 		for _, r := range e.String() {
