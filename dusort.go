@@ -139,6 +139,7 @@ func init() {
 }
 
 func parseSize(s string) (float64, error) {
+	s = strings.TrimPrefix(s, " ")
 	suffix := s[len(s)-1]
 	m, ok := sizeSuffix[suffix]
 	var num float64
