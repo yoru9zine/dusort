@@ -13,6 +13,9 @@ import (
 )
 
 func main() {
+	if !piped(os.Stdin) {
+		log.Fatal("stdin is not pipe. please use `du -sh /path/to/dir/* | dusort`")
+	}
 	var m sync.Mutex
 	if err := termbox.Init(); err != nil {
 		log.Fatalf("failed to initialize terminal: %s", err)
@@ -173,4 +176,12 @@ func readEntry(c chan entry) {
 		log.Printf("error at readEntry: %s\n", err)
 	}
 	close(c)
+}
+
+func piped(f *os.File) bool {
+	stat, _ := f.Stat()
+	if (stat.Mode() & os.ModeCharDevice) == 0 {
+		return true
+	}
+	return false
 }
