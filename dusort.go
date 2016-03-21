@@ -151,10 +151,11 @@ func init() {
 		n = n * 1024
 		sizeSuffix[r] = n
 	}
+	sizeSuffix['B'] = 1
 }
 
 func parseSize(s string) (float64, error) {
-	s = strings.TrimPrefix(s, " ")
+	s = strings.TrimLeft(s, " ")
 	suffix := s[len(s)-1]
 	m, ok := sizeSuffix[suffix]
 	var num float64
