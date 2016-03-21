@@ -2,6 +2,8 @@
 
 Sort du output for impatient person.
 
+![Demo](./dusort.gif)
+
 ## install
 
 ```
